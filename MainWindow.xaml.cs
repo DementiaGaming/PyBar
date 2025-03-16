@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DeftSharp.Windows.Input.Keyboard;
 using System.Diagnostics;
+using System.Windows.Threading;
 
 namespace test2;
 
@@ -23,6 +24,21 @@ namespace test2;
 public partial class MainWindow : Window
 {
     bool windowDown = true;
+
+    // y 60 - 0
+    // x 300 - 16000
+
+    [DllImport("user32.dll")]
+    private static extern bool GetCursorPos(out POINT lpPoint);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct POINT
+    {
+        public int X;
+        public int Y;
+    }
+
+    private readonly DispatcherTimer _timer;
 
     public MainWindow()
     {
@@ -39,10 +55,50 @@ public partial class MainWindow : Window
         double windowHeight = this.Height;
 
         this.Left = (screenWidth - windowWidth) / 2;
-        this.Top = (screenHeight - windowHeight) - 800; // top ending position is - 600    
+        this.Top = (screenHeight - windowHeight) - 800; // top ending position is - 600
+
+        checkIfMouseAtTop();
+
+        _timer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(100)
+        };
+        _timer.Tick += Timer_Tick;
+        _timer.Start();
     }
 
-    private void StartEnterAnimation()
+    private void Timer_Tick(object sender, EventArgs e)
+    {
+        if (GetCursorPos(out POINT p))
+        {
+            Title = $"Mouse Position: X={p.X}, Y={p.Y}";
+        }
+    }
+
+    private async void checkIfMouseAtTop()
+    {
+        while (true)
+        {
+            double screenHeight = SystemParameters.PrimaryScreenHeight;
+            double windowHeight = this.Height;
+
+            await Task.Delay(100);
+            if (GetCursorPos(out POINT p))
+            {
+                if (p.Y <= 100 && p.X >= 300 && p.X <= 1600 && this.Top == (screenHeight - windowHeight) - 800)
+                {
+                    StartPreviewAnimation();
+                }
+                else if (p.Y > 100 && this.Top == (screenHeight - windowHeight) - 700)
+                {
+                    StartExitFromPreviewAnimation();
+                }
+
+            }
+        }
+    }
+
+    private void StartPreviewAnimation()
     {
         double screenHeight = SystemParameters.PrimaryScreenHeight;
         double windowHeight = this.Height;
@@ -51,8 +107,25 @@ public partial class MainWindow : Window
         DoubleAnimation anim = new DoubleAnimation
         {
             From = (screenHeight - windowHeight) - 800,
+            To = (screenHeight - windowHeight) - 700,
+            Duration = TimeSpan.FromSeconds(0.25),
+            EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
+        };
+
+        this.BeginAnimation(Window.TopProperty, anim);
+
+    }
+    private void StartEnterAnimation()
+    {
+        double screenHeight = SystemParameters.PrimaryScreenHeight;
+        double windowHeight = this.Height;
+        this.Top = (screenHeight - windowHeight) - 700; // Start position
+
+        DoubleAnimation anim = new DoubleAnimation
+        {
+            From = (screenHeight - windowHeight) - 700,
             To = (screenHeight - windowHeight) - 600,
-            Duration = TimeSpan.FromSeconds(0.5),
+            Duration = TimeSpan.FromSeconds(0.25),
             EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
         };
 
@@ -71,6 +144,23 @@ public partial class MainWindow : Window
             From = (screenHeight - windowHeight) - 600,
             To = (screenHeight - windowHeight) - 800,
             Duration = TimeSpan.FromSeconds(0.5),
+            EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
+        };
+
+        this.BeginAnimation(Window.TopProperty, anim);
+    }
+
+    private void StartExitFromPreviewAnimation()
+    {
+        double screenHeight = SystemParameters.PrimaryScreenHeight;
+        double windowHeight = this.Height;
+        this.Top = (screenHeight - windowHeight) - 700; // Start position
+
+        DoubleAnimation anim = new DoubleAnimation
+        {
+            From = (screenHeight - windowHeight) - 700,
+            To = (screenHeight - windowHeight) - 800,
+            Duration = TimeSpan.FromSeconds(0.25),
             EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
         };
 
