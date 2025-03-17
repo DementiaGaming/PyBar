@@ -93,9 +93,30 @@ public partial class MainWindow : Window
                 {
                     StartExitFromPreviewAnimation();
                 }
+                else if (p.Y <= 0 && p.X >= 300 && p.X <= 1600 && this.Top == (screenHeight - windowHeight) - 700)
+                {
+                    OpenToolBar();
+                }
 
             }
         }
+    }
+
+    private void OpenToolBar()
+    {
+        double screenHeight = SystemParameters.PrimaryScreenHeight;
+        double windowHeight = this.Height;
+        this.Top = (screenHeight - windowHeight) - 700; // Start position
+
+        DoubleAnimation anim = new DoubleAnimation
+        {
+            From = (screenHeight - windowHeight) - 700,
+            To = (screenHeight - windowHeight) - 600,
+            Duration = TimeSpan.FromSeconds(0.25),
+            EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
+        };
+
+        this.BeginAnimation(Window.TopProperty, anim);
     }
 
     private void StartPreviewAnimation()
@@ -113,7 +134,6 @@ public partial class MainWindow : Window
         };
 
         this.BeginAnimation(Window.TopProperty, anim);
-
     }
     private void StartEnterAnimation()
     {
@@ -130,7 +150,6 @@ public partial class MainWindow : Window
         };
 
         this.BeginAnimation(Window.TopProperty, anim);
-
     }
 
     private void StartExitAnimation()
