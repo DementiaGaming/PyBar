@@ -16,7 +16,7 @@ using DeftSharp.Windows.Input.Keyboard;
 using System.Diagnostics;
 using System.Windows.Threading;
 
-namespace test2;
+namespace PyBar;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

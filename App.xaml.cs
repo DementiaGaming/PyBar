@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace test2;
+namespace PyBar;
 
 /// <summary>
 /// Interaction logic for App.xaml

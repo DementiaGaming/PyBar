@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <AssemblyName>PyBar</AssemblyName>
+    <RootNamespace>PyBar</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
