@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PyBar"
         mc:Ignorable="d"
         Title="MainWindow" Height="98" Width="800" WindowStyle="None" Topmost="True" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent" KeyDown="Window_KeyDown_1">
-    <Border BorderThickness="1" Background="#FF1F1F1F" CornerRadius="10,10,10,10" BorderBrush="Black">
-        <Button x:Name="Exit_Button" Content="Button" Margin="689,9,9,9" Width="100" Background="#FF232323" BorderBrush="#FF282828"/>
+    <Border BorderThickness="1" Background="#FF1F1F1F" CornerRadius="10,10,10,10" BorderBrush="Black" Height="100">
+        <Button x:Name="Exit_Button" Content="Exit" Margin="689,9,9,9" Width="100" BorderBrush="#FF282828" Background="{x:Null}" Foreground="White" Click="Exit_Button_Click"/>
     </Border>
 </Window>

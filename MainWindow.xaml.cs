@@ -207,4 +207,9 @@ public partial class MainWindow : Window
             }
         }
     }
+
+    private void Exit_Button_Click(object sender, RoutedEventArgs e)
+    {
+        StartExitAnimation();
+    }
 }
