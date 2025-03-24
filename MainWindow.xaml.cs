@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using DeftSharp.Windows.Input.Keyboard;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.IO;
 
 namespace PyBar;
 
@@ -24,6 +25,7 @@ namespace PyBar;
 public partial class MainWindow : Window
 {
     bool windowDown = true;
+    bool scriptRunning = false;
 
     // y 60 - 0
     // x 300 - 16000
@@ -193,23 +195,61 @@ public partial class MainWindow : Window
 
     private void Window_KeyDown_1(object sender, KeyEventArgs e)
     {
-        if (Keyboard.IsKeyDown(Key.LeftCtrl))
+        if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.Q)
         {
-            if (e.Key == Key.O && windowDown)
-            {
-                windowDown = false;
-                StartEnterAnimation();
-            }
-            else if (e.Key == Key.O && !windowDown)
-            {
-                windowDown = true;
-                StartExitAnimation();
-            }
+            App.Current.Shutdown();
         }
     }
 
     private void Exit_Button_Click(object sender, RoutedEventArgs e)
     {
         StartExitAnimation();
+    }
+
+    private void Run_Button_Click(object sender, RoutedEventArgs e)
+    {
+        if (!scriptRunning)
+        {
+            Run_Button.Content = "Stop";
+            scriptRunning = true;
+            string scriptToRun = Command_Box.Text;
+
+            ProcessStartInfo start = new ProcessStartInfo
+            {
+                FileName = "python",
+                Arguments = $"-c \"{scriptToRun}\"",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            try
+            {
+                using (Process process = new Process { StartInfo = start })
+                {
+                    process.Start();
+
+                    string output = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
+
+                    process.WaitForExit();
+
+                    Output_Box.Visibility = Visibility.Visible;
+                    Output_Box.Text = !string.IsNullOrWhiteSpace(error) ? $"Error: {error}" : output;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        else
+        {
+            Output_Box.Visibility = Visibility.Hidden;
+            Run_Button.Content = "Run";
+            scriptRunning = false;
+        }
     }
 }
