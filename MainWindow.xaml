@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PyBar"
         mc:Ignorable="d"
-        Title="MainWindow" Height="98" Width="800" WindowStyle="None" Topmost="True" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent" KeyDown="Window_KeyDown_1">
+        Title="PyBar" Height="98" Width="800" WindowStyle="None" Topmost="True" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent" KeyDown="Window_KeyDown_1" ShowInTaskbar="False">
     <Grid>
         <Border BorderThickness="1" Background="#FF1F1F1F" CornerRadius="10,10,10,10" BorderBrush="Black" Height="100">
             <Grid>
                 <Button x:Name="Exit_Button" Content="Exit" Margin="689,9,9,9" Width="100" BorderBrush="#FF282828" Background="{x:Null}" Foreground="White" Click="Exit_Button_Click"/>
                 <TextBox x:Name="Command_Box" Margin="118,9,118,9" Background="#FF282828" Foreground="White" Height="80" ToolTip="Enter Python Code Here" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsTab="True" AcceptsReturn="True"/>
                 <Button x:Name="Run_Button" Content="Run" Margin="9,9,689,9" Width="100" BorderBrush="#FF282828" Background="{x:Null}" Foreground="White" Click="Run_Button_Click"/>
-                <TextBox x:Name="Output_Box" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="669" Height="80" Background="#FF282828" Foreground="White" Margin="118,0,0,0" AcceptsReturn="True" Visibility="Hidden"/>
+                <TextBox x:Name="Output_Box" IsReadOnly="True" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Width="669" Height="80" Background="#FF282828" Foreground="White" Margin="118,0,118,0" AcceptsReturn="True" Visibility="Hidden"/>
             </Grid>
         </Border>
     </Grid>

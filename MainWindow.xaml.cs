@@ -214,7 +214,7 @@ public partial class MainWindow : Window
             scriptRunning = true;
             string scriptToRun = Command_Box.Text;
 
-            ProcessStartInfo start = new ProcessStartInfo
+            ProcessStartInfo runScriptInfo = new ProcessStartInfo
             {
                 FileName = "python",
                 Arguments = $"-c \"{scriptToRun}\"",
@@ -227,14 +227,14 @@ public partial class MainWindow : Window
 
             try
             {
-                using (Process process = new Process { StartInfo = start })
+                using (Process runScript = new Process { StartInfo = runScriptInfo })
                 {
-                    process.Start();
+                    runScript.Start();
 
-                    string output = process.StandardOutput.ReadToEnd();
-                    string error = process.StandardError.ReadToEnd();
+                    string output = runScript.StandardOutput.ReadToEnd();
+                    string error = runScript.StandardError.ReadToEnd();
 
-                    process.WaitForExit();
+                    runScript.WaitForExit();
 
                     Output_Box.Visibility = Visibility.Visible;
                     Output_Box.Text = !string.IsNullOrWhiteSpace(error) ? $"Error: {error}" : output;
